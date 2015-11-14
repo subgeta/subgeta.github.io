@@ -1,2 +1,6 @@
 # MedaiSite
-Test for Media Site
+Website Projects
+
+This is an example site for media blogs.
+
+Test Test
