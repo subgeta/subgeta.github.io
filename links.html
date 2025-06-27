@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- Page Setttings-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- ViewPort Settings-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Title, Description, Keywords-->
+    <title>CONTACT | Juan Arriaga - Designer | Artist</title>
+    <meta content="CONTACT | Juan Arriaga - Designer | Artist Portfolio" name="description">
+    <meta content="Juan,Arriaga,Designer,Artist,Subgeta,Logo,Game,Art,Design,ホアン,アリアガ,デザイナー,アーティスト,Subgeta,ロゴ,ゲーム,アート,デザイン" name="keywords">
+    <!-- Site Bot/Spider Settings-->
+    <meta content="Juan Arriaga - Designer | Artist" property="og:title">
+    <meta content="Juan Arriaga - Designer | Artist" property="og:description">
+    <meta content="http://subgeta.com/images/og.png" property="og:image">
+    <meta content="http://subgeta.com" property="og:url">
+    <meta content="website" property="og:type">
+    <meta content="en_US" property="og:locale">
+    <!-- Twitter-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Juan Arriaga - Designer | Artist">
+    <meta name="twitter:creator" value="@subgeta">
+    <meta name="twitter:description" content="Juan Arriaga - Designer | Artist Portfolio">
+    <meta name="twitter:image" content="http://subgeta.com/images/og.png">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="http://subgeta.com/images/appletouchicon150.png" />
+    <!-- CSS-->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oxygen|Noto Sans|Noto Sans JP|Roboto|Noto Serif">
+    <!-- Google Captcha-->
+     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+     <script>
+       function onSubmit(token) {
+         document.getElementById("cform").submit();
+       }
+     </script>
+
+<body class="w3-light-grey">
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-animate-right w3-top w3-text-light-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;right:0;" id="mySidebar">
+  <a href="javascript:void()" onclick="w3_close()" class="close"><span class="bigx"></span></a>
+  <a href="http://subgeta.com/" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-16">PORTFOLIO</a> 
+  <a href="http://subgeta.com/about.html" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-16">ABOUT</a> 
+  <a href="http://subgeta.com/contact.html" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-16">CONTACT</a>
+</nav>
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-xlarge w3-padding-16 w3-white">
+  <span class="w3-left w3-padding" style="font-family:Noto Serif;"><a style="text-decoration:none;" href="http://www.subgeta.com">JUAN ARRIAGA</a></span>
+  <a href="javascript:void(0)" class="w3-right w3-button w3-white" onclick="w3_open()">☰</a>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main w3-content" style="max-width:1600px;margin-top:83px">
+
+  <!-- Contact section -->
+  <div class="w3-container w3-light-grey w3-padding-32 w3-padding-large" id="contact">
+    <div class="w3-content" style="max-width:600px">
+      <div class="container">
+        <h2 class="title__pg">
+          <strong>GET IN TOUCH!</strong>
+          <span>ご連絡</span>
+        </h2>
+        <p>Please fill out the form below.<br />
+          I love hearing from new people!<br /><br />
+          以下のフォームに記入してください。<br /> 
+          メッセージお楽しみにしています！<br /><br />
+        </p>
+      </div>
+
+      <div class="tri"> </div>
+
+      <div class="container">
+
+        <form action="contact.php" id='cform' method="POST">
+          <label for="name">Name | お名前</label>
+          <input type="text" id="name" name="name" placeholder="Your name...">
+
+          <label for="email">E-mail | メールアドレス</label>
+          <input type="text" id="email" name="email" placeholder="mail@example.com">
+
+          <label for="subject">Message | お問い合わせ内容</label>
+          <textarea id="subject" name="subject" placeholder="Message..." style="height:200px"></textarea>
+
+
+          <button class="g-recaptcha" data-sitekey="6LdeSEoaAAAAAOUdkBe_suU3vb_GBWQxaGRQ-kgY" data-callback='onSubmit'>Submit</button>
+          <br/>
+
+          <input type="submit" value="Submit">
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+
+<!-- Footer -->
+<!-- Copyright -->
+<div class="w3-center">© Juan Arriaga All Rights Reserved.</div>
+<!-- End page content -->
+</div>
+<script>
+// Script to open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+</script>
+</body>
+</html>
