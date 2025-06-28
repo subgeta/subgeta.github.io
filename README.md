@@ -1,6 +1,3 @@
-# Media Site
-Website Projects
-
-This is an example site for media blogs.
-
-Test Test
+# Portfolio Site
+Website Portfolio
+2025 ver.1.0
