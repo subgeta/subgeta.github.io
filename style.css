@@ -1936,15 +1936,15 @@ p.profilecaption {
 }
 .about .sns li.icon__twitter {
   background: url(images/Twitter_Logo_Blue.png) left center no-repeat;
-    background-size: 26px;
+    background-size: 36px;
 }
 .about .sns li.icon__youtube {
   background: url(images/youtube.png) left center no-repeat;
-    background-size: 26px;
+    background-size: 24px;
 }
 .about .sns li.icon__instagram {
   background: url(images/insta.png) left center no-repeat;
-    background-size: 26px;
+    background-size: 28px;
 }
 .about .sns li.icon__instagram a,
 .about .sns li.icon__youtube a,
