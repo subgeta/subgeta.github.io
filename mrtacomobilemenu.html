@@ -38,11 +38,7 @@
       }
 
       header {
-        background: linear-gradient(
-          135deg,
-          var(--dark-red),
-          var(--primary-red)
-        );
+        background: linear-gradient(135deg, var(--dark-red), var(--primary-red));
         padding: 18px 20px;
         display: flex;
         justify-content: center;
@@ -220,92 +216,25 @@
 
       // Fallback dataset
       const defaultMenuData = [
-        {
-          Category: "Tacos",
-          Item: "Asada",
-          Description:
-            "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream",
-          Price: "$4.25",
-        },
-        {
-          Category: "Tacos",
-          Item: "Steak",
-          Description:
-            "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream",
-          Price: "$4.25",
-        },
-        {
-          Category: "Torta",
-          Item: "Asada",
-          Description: "Mexican styled sandwich with your favorite toppings!",
-          Price: "$12.39",
-        },
-        {
-          Category: "Burrito",
-          Item: "Asada",
-          Description: "Classic delicious Burrito served fresh and hot!",
-          Price: "$11.39",
-        },
-        {
-          Category: "Burrito",
-          Item: "--",
-          Description: "Extra Cheese",
-          Price: "$2.25",
-        },
-        {
-          Category: "Burrito",
-          Item: "--",
-          Description: "Extra Guacamole",
-          Price: "$2.25",
-        },
-        {
-          Category: "Platter 11",
-          Item: "Quesadillas",
-          Description: "(3) Steak quesadillas served with rice and beans.",
-          Price: "$18.00",
-        },
-        {
-          Category: "Platter 12",
-          Item: "Steak",
-          Description: "(3) Steak tacos served with rice and beans.",
-          Price: "$16.95",
-        },
-        {
-          Category: "Drinks",
-          Item: "Coca Cola",
-          Description: "Classic Mexican Glass bottle Coca Cola",
-          Price: "$4.00",
-        },
-        {
-          Category: "Drinks",
-          Item: "Horchata",
-          Description: "Classic Mexican Rice drink (sweet!)",
-          Price: "$4.50",
-        },
-        {
-          Category: "Drinks",
-          Item: "Water",
-          Description: "Water Bottle",
-          Price: "$1.00",
-        },
-        {
-          Category: "Drinks",
-          Item: "Canned Soda",
-          Description: "Pepsi, Diet Pepsi, Sprite",
-          Price: "$2.00",
-        },
-        {
-          Category: "Drinks",
-          Item: "Jarritos",
-          Description: "Authentic Mexican fruit sodas",
-          Price: "$3.50",
-        },
+        { Category: "Tacos", Item: "Asada", Description: "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream", Price: "$4.25" },
+        { Category: "Tacos", Item: "Steak", Description: "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream", Price: "$4.25" },
+        { Category: "Torta", Item: "Asada", Description: "Mexican styled sandwich with your favorite toppings!", Price: "$12.39" },
+        { Category: "Burrito", Item: "Asada", Description: "Classic delicious Burrito served fresh and hot!", Price: "$11.39" },
+        { Category: "Burrito", Item: "--", Description: "Extra Cheese", Price: "$2.25" },
+        { Category: "Burrito", Item: "--", Description: "Extra Guacamole", Price: "$2.25" },
+        { Category: "Platter 11", Item: "Quesadillas", Description: "(3) Steak quesadillas served with rice and beans.", Price: "$18.00" },
+        { Category: "Platter 12", Item: "Steak", Description: "(3) Steak tacos served with rice and beans.", Price: "$16.95" },
+        { Category: "Drinks", Item: "Coca Cola", Description: "Classic Mexican Glass bottle Coca Cola", Price: "$4.00" },
+        { Category: "Drinks", Item: "Horchata", Description: "Classic Mexican Rice drink (sweet!)", Price: "$4.50" },
+        { Category: "Drinks", Item: "Water", Description: "Water Bottle", Price: "$1.00" },
+        { Category: "Drinks", Item: "Canned Soda", Description: "Pepsi, Diet Pepsi, Sprite", Price: "$2.00" },
+        { Category: "Drinks", Item: "Jarritos", Description: "Authentic Mexican fruit sodas", Price: "$3.50" },
       ];
 
       // Global callback function for the gviz script response
       window.handleMenuResponse = function (response) {
         // Clean up the injected script tag
-        const scriptTag = document.getElementById("gviz-script");
+        const scriptTag = document.getElementById('gviz-script');
         if (scriptTag) scriptTag.remove();
 
         try {
@@ -322,40 +251,30 @@
             const label = (col.label || "").trim().toLowerCase();
             if (label.includes("category")) labelMap.category = index;
             else if (label.includes("item")) labelMap.item = index;
-            else if (label.includes("description") || label.includes("desc"))
-              labelMap.description = index;
+            else if (label.includes("description") || label.includes("desc")) labelMap.description = index;
             else if (label.includes("price")) labelMap.price = index;
           });
 
           // Fallback to positional mapping if labels are missing
-          const catIdx =
-            labelMap.category !== undefined ? labelMap.category : 0;
+          const catIdx = labelMap.category !== undefined ? labelMap.category : 0;
           const itemIdx = labelMap.item !== undefined ? labelMap.item : 1;
-          const descIdx =
-            labelMap.description !== undefined ? labelMap.description : 2;
+          const descIdx = labelMap.description !== undefined ? labelMap.description : 2;
           const priceIdx = labelMap.price !== undefined ? labelMap.price : 3;
 
-          const menuData = rows
-            .map((row) => {
-              const cells = row.c || [];
-              const getVal = (idx) => {
-                if (
-                  !cells[idx] ||
-                  cells[idx].v === null ||
-                  cells[idx].v === undefined
-                )
-                  return "";
-                return String(cells[idx].v);
-              };
+          const menuData = rows.map(row => {
+            const cells = row.c || [];
+            const getVal = (idx) => {
+              if (!cells[idx] || cells[idx].v === null || cells[idx].v === undefined) return "";
+              return String(cells[idx].v);
+            };
 
-              return {
-                Category: getVal(catIdx),
-                Item: getVal(itemIdx),
-                Description: getVal(descIdx),
-                Price: getVal(priceIdx),
-              };
-            })
-            .filter((item) => item.Item && item.Item.trim() !== ""); // Filter out empty rows
+            return {
+              Category: getVal(catIdx),
+              Item: getVal(itemIdx),
+              Description: getVal(descIdx),
+              Price: getVal(priceIdx),
+            };
+          }).filter(item => item.Item && item.Item.trim() !== ""); // Filter out empty rows
 
           if (menuData.length > 0) {
             renderMenu(menuData);
@@ -371,14 +290,14 @@
       // Load the data via script tag injection (bypasses CORS)
       function loadMenuViaGviz() {
         // Remove any existing script to prevent duplicate callbacks
-        const existing = document.getElementById("gviz-script");
+        const existing = document.getElementById('gviz-script');
         if (existing) existing.remove();
 
-        const script = document.createElement("script");
-        script.id = "gviz-script";
+        const script = document.createElement('script');
+        script.id = 'gviz-script';
         // Using the real spreadsheet ID and gid to target the specific tab
         script.src = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json;responseHandler=handleMenuResponse&headers=1&gid=${SHEET_GID}`;
-
+        
         script.onerror = function () {
           console.error("Failed to load gviz script. Using fallback.");
           script.remove();
@@ -389,9 +308,9 @@
 
         // Safety timeout: if Google doesn't respond in 10 seconds, fallback
         setTimeout(() => {
-          const stillThere = document.getElementById("gviz-script");
+          const stillThere = document.getElementById('gviz-script');
           if (stillThere) {
-            const container = document.getElementById("menu-container");
+            const container = document.getElementById('menu-container');
             if (container && container.children.length === 0) {
               console.warn("gviz request timed out. Using fallback.");
               stillThere.remove();
