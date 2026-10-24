@@ -208,11 +208,8 @@
     </footer>
 
     <script>
-      // ==========================================
-      // YOUR ACTUAL SPREADSHEET ID
-      // ==========================================
       const SPREADSHEET_ID = "1EFKgOE8G3Zx6Ep63E9GLvXTimhN0LRotKbzTTdlGxwc";
-      const SHEET_GID = "0"; // Specifies the first tab
+      const SHEET_GID = "0";
 
       // Fallback dataset
       const defaultMenuData = [
@@ -245,7 +242,7 @@
           const cols = response.table.cols;
           const rows = response.table.rows;
 
-          // Find column indices by label (robust against column order changes)
+          // Find column indices by label
           const labelMap = {};
           cols.forEach((col, index) => {
             const label = (col.label || "").trim().toLowerCase();
@@ -255,7 +252,7 @@
             else if (label.includes("price")) labelMap.price = index;
           });
 
-          // Fallback to positional mapping if labels are missing
+          // Fallback to positional mapping
           const catIdx = labelMap.category !== undefined ? labelMap.category : 0;
           const itemIdx = labelMap.item !== undefined ? labelMap.item : 1;
           const descIdx = labelMap.description !== undefined ? labelMap.description : 2;
@@ -274,7 +271,7 @@
               Description: getVal(descIdx),
               Price: getVal(priceIdx),
             };
-          }).filter(item => item.Item && item.Item.trim() !== ""); // Filter out empty rows
+          }).filter(item => item.Item && item.Item.trim() !== "");
 
           if (menuData.length > 0) {
             renderMenu(menuData);
@@ -287,16 +284,25 @@
         }
       };
 
-      // Load the data via script tag injection (bypasses CORS)
+      // Fallback handler in case Google ignores the custom responseHandler
+      // and defaults to the standard google.visualization wrapper
+      window.google = window.google || {};
+      window.google.visualization = window.google.visualization || {};
+      window.google.visualization.Query = window.google.visualization.Query || {};
+      window.google.visualization.Query.setResponse = function(response) {
+        window.handleMenuResponse(response);
+      };
+
+      // Load the data via script tag injection
       function loadMenuViaGviz() {
-        // Remove any existing script to prevent duplicate callbacks
         const existing = document.getElementById('gviz-script');
         if (existing) existing.remove();
 
         const script = document.createElement('script');
         script.id = 'gviz-script';
-        // Using the real spreadsheet ID and gid to target the specific tab
-        script.src = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json;responseHandler=handleMenuResponse&headers=1&gid=${SHEET_GID}`;
+        
+        // FIXED: responseHandler uses a colon (:) instead of an equals sign (=)
+        script.src = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json;responseHandler:handleMenuResponse&headers=1&gid=${SHEET_GID}`;
         
         script.onerror = function () {
           console.error("Failed to load gviz script. Using fallback.");
@@ -306,7 +312,7 @@
 
         document.body.appendChild(script);
 
-        // Safety timeout: if Google doesn't respond in 10 seconds, fallback
+        // Safety timeout
         setTimeout(() => {
           const stillThere = document.getElementById('gviz-script');
           if (stillThere) {
