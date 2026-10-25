@@ -271,7 +271,7 @@
               Description: getVal(descIdx),
               Price: getVal(priceIdx),
             };
-          }).filter(item => item.Item && item.Item.trim() !== "");
+          }).filter(item => (item.Item && item.Item.trim() !== "") || (item.Description && item.Description.trim() !== ""));
 
           if (menuData.length > 0) {
             renderMenu(menuData);
@@ -301,7 +301,6 @@
         const script = document.createElement('script');
         script.id = 'gviz-script';
         
-        // FIXED: responseHandler uses a colon (:) instead of an equals sign (=)
         script.src = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json;responseHandler:handleMenuResponse&headers=1&gid=${SHEET_GID}`;
         
         script.onerror = function () {
@@ -353,7 +352,7 @@
           listDiv.className = "menu-items-list";
 
           items.forEach((item) => {
-            if (!item.Item) return;
+            if (!item.Item && !item.Description) return;
 
             let itemDiv = document.createElement("div");
             itemDiv.className = "menu-item";
@@ -364,26 +363,40 @@
             let headerDiv = document.createElement("div");
             headerDiv.className = "item-header";
 
-            let nameSpan = document.createElement("span");
-            nameSpan.className = "item-name";
-            nameSpan.innerText = item.Item;
+            const rawName = (item.Item || "").trim();
+            const isPlaceholder = rawName === "--" || rawName === "-" || rawName === "";
 
-            let priceSpan = document.createElement("span");
-            priceSpan.className = "item-price";
-            priceSpan.innerText = item.Price
-              ? item.Price.startsWith("$")
+            if (!isPlaceholder) {
+              let nameSpan = document.createElement("span");
+              nameSpan.className = "item-name";
+              nameSpan.innerText = rawName;
+              headerDiv.appendChild(nameSpan);
+            }
+
+            if (item.Price) {
+              let priceSpan = document.createElement("span");
+              priceSpan.className = "item-price";
+              priceSpan.innerText = item.Price.startsWith("$")
                 ? item.Price
-                : "$" + item.Price
-              : "";
+                : "$" + item.Price;
+              headerDiv.appendChild(priceSpan);
+            }
 
-            headerDiv.appendChild(nameSpan);
-            headerDiv.appendChild(priceSpan);
-            detailsDiv.appendChild(headerDiv);
+            if (headerDiv.children.length > 0) {
+              detailsDiv.appendChild(headerDiv);
+            }
 
             if (item.Description) {
               let descDiv = document.createElement("div");
               descDiv.className = "item-desc";
               descDiv.innerText = item.Description;
+
+              if (isPlaceholder) {
+                descDiv.style.fontWeight = "700";
+                descDiv.style.color = "var(--text-main)";
+                descDiv.style.fontSize = "clamp(1rem, 1.8vw, 1.15rem)";
+              }
+
               detailsDiv.appendChild(descDiv);
             }
 
