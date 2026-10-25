@@ -131,7 +131,7 @@
 
       .menu-item {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 15px;
         padding-bottom: 10px;
         border-bottom: 1px solid #efefef;
@@ -140,6 +140,17 @@
       .menu-item:last-child {
         border-bottom: none;
         padding-bottom: 0;
+      }
+
+      /* Image styling for menu items */
+      .item-image {
+        width: 65px;
+        height: 65px;
+        border-radius: 8px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       }
 
       .item-details {
@@ -222,6 +233,7 @@
       const SHEET_GID = "0";
 
       const defaultMenuData = [
+        { Category: "Sides", Item: "Regular Fries", Price: "3.50", Description: "Crispy golden french fries", DPrice: "", "Image URL": "https://raw.githubusercontent.com/subgeta/subgeta.github.io/refs/heads/master/mrtacomobil/regfries.jpg" },
         { Category: "Tacos", Item: "Asada", Price: "4.25", Description: "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream", DPrice: "", "Image URL": "" },
         { Category: "Tacos", Item: "Steak", Price: "4.25", Description: "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream", DPrice: "", "Image URL": "" },
         { Category: "Torta", Item: "Asada", Price: "12.39", Description: "Mexican styled sandwich with your favorite toppings!", DPrice: "", "Image URL": "" },
@@ -237,7 +249,6 @@
         { Category: "Drinks", Item: "Jarritos", Price: "3.50", Description: "Authentic Mexican fruit sodas", DPrice: "", "Image URL": "" },
       ];
 
-      // Helper function to format prices cleanly to 2 decimal places (e.g. 4 -> $4.00, 1.5 -> $1.50)
       function formatPrice(val) {
         if (!val) return "";
         let cleanVal = String(val).replace("$", "").trim();
@@ -370,11 +381,21 @@
             const itemPrice = formatPrice(item.Price);
             const itemDesc = (item.Description || "").trim();
             const itemDPrice = formatPrice(item.DPrice);
+            const imageUrl = (item["Image URL"] || "").trim();
 
             if (!itemName && !itemDesc) return;
 
             let itemDiv = document.createElement("div");
             itemDiv.className = "menu-item";
+
+            // If an image URL exists, create and append the image element on the left
+            if (imageUrl && imageUrl.startsWith("http")) {
+              let img = document.createElement("img");
+              img.className = "item-image";
+              img.src = imageUrl;
+              img.alt = itemName || itemDesc;
+              itemDiv.appendChild(img);
+            }
 
             let detailsDiv = document.createElement("div");
             detailsDiv.className = "item-details";
