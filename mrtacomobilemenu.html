@@ -170,7 +170,6 @@
         white-space: nowrap;
       }
 
-      /* Secondary option price style with slightly smaller font size */
       .dprice {
         font-size: clamp(0.95rem, 1.6vw, 1.1rem);
         font-weight: 900;
@@ -222,24 +221,31 @@
       const SPREADSHEET_ID = "1EFKgOE8G3Zx6Ep63E9GLvXTimhN0LRotKbzTTdlGxwc";
       const SHEET_GID = "0";
 
-      // Updated fallback dataset matching the new headers: Category, Item, Price, Description, DPrice, Image URL
       const defaultMenuData = [
-        { Category: "Tacos", Item: "Asada", Price: "$4.25", Description: "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream", DPrice: "", "Image URL": "" },
-        { Category: "Tacos", Item: "Steak", Price: "$4.25", Description: "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream", DPrice: "", "Image URL": "" },
-        { Category: "Torta", Item: "Asada", Price: "$12.39", Description: "Mexican styled sandwich with your favorite toppings!", DPrice: "", "Image URL": "" },
-        { Category: "Burrito", Item: "Asada", Price: "$11.39", Description: "Beans, Onions, Lettuce, Tomato, Sour Cream", DPrice: "", "Image URL": "" },
-        { Category: "Burrito", Item: "", Price: "", Description: "Extra Cheese", DPrice: "$2.25", "Image URL": "" },
-        { Category: "Burrito", Item: "", Price: "", Description: "Extra Guacamole", DPrice: "$2.25", "Image URL": "" },
-        { Category: "Platter 11", Item: "Quesadillas", Price: "$18.00", Description: "(3) Steak quesadillas served with rice and beans.", DPrice: "", "Image URL": "" },
-        { Category: "Platter 12", Item: "Steak", Price: "$16.95", Description: "(3) Steak tacos served with rice and beans.", DPrice: "", "Image URL": "" },
-        { Category: "Drinks", Item: "Coca Cola", Price: "$4.00", Description: "Classic Mexican Glass bottle Coca Cola", DPrice: "", "Image URL": "" },
-        { Category: "Drinks", Item: "Horchata", Description: "Classic Mexican Rice drink (sweet!)", Price: "$4.50", DPrice: "", "Image URL": "" },
-        { Category: "Drinks", Item: "Water", Price: "$1.00", Description: "Water Bottle", DPrice: "", "Image URL": "" },
-        { Category: "Drinks", Item: "Canned Soda", Price: "$2.00", Description: "Pepsi, Diet Pepsi, Sprite", DPrice: "", "Image URL": "" },
-        { Category: "Drinks", Item: "Jarritos", Price: "$3.50", Description: "Authentic Mexican fruit sodas", DPrice: "", "Image URL": "" },
+        { Category: "Tacos", Item: "Asada", Price: "4.25", Description: "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream", DPrice: "", "Image URL": "" },
+        { Category: "Tacos", Item: "Steak", Price: "4.25", Description: "Toppings: Cilantro, Lettuce, Tomato, Jalapenos, Sour Cream", DPrice: "", "Image URL": "" },
+        { Category: "Torta", Item: "Asada", Price: "12.39", Description: "Mexican styled sandwich with your favorite toppings!", DPrice: "", "Image URL": "" },
+        { Category: "Burrito", Item: "Asada", Price: "11.39", Description: "Beans, Onions, Lettuce, Tomato, Sour Cream", DPrice: "", "Image URL": "" },
+        { Category: "Burrito", Item: "", Price: "", Description: "Extra Cheese", DPrice: "2.25", "Image URL": "" },
+        { Category: "Burrito", Item: "", Price: "", Description: "Extra Guacamole", DPrice: "2.25", "Image URL": "" },
+        { Category: "Platter 11", Item: "Quesadillas", Price: "18.00", Description: "(3) Steak quesadillas served with rice and beans.", DPrice: "", "Image URL": "" },
+        { Category: "Platter 12", Item: "Steak", Price: "16.95", Description: "(3) Steak tacos served with rice and beans.", DPrice: "", "Image URL": "" },
+        { Category: "Drinks", Item: "Coca Cola", Price: "4.00", Description: "Classic Mexican Glass bottle Coca Cola", DPrice: "", "Image URL": "" },
+        { Category: "Drinks", Item: "Horchata", Description: "Classic Mexican Rice drink (sweet!)", Price: "4.50", DPrice: "", "Image URL": "" },
+        { Category: "Drinks", Item: "Water", Price: "1.00", Description: "Water Bottle", DPrice: "", "Image URL": "" },
+        { Category: "Drinks", Item: "Canned Soda", Price: "1.50", Description: "Pepsi, Diet Pepsi, Sprite", DPrice: "", "Image URL": "" },
+        { Category: "Drinks", Item: "Jarritos", Price: "3.50", Description: "Authentic Mexican fruit sodas", DPrice: "", "Image URL": "" },
       ];
 
-      // Global callback function for the gviz script response
+      // Helper function to format prices cleanly to 2 decimal places (e.g. 4 -> $4.00, 1.5 -> $1.50)
+      function formatPrice(val) {
+        if (!val) return "";
+        let cleanVal = String(val).replace("$", "").trim();
+        let num = parseFloat(cleanVal);
+        if (isNaN(num)) return val;
+        return "$" + num.toFixed(2);
+      }
+
       window.handleMenuResponse = function (response) {
         const scriptTag = document.getElementById('gviz-script');
         if (scriptTag) scriptTag.remove();
@@ -252,7 +258,6 @@
           const cols = response.table.cols;
           const rows = response.table.rows;
 
-          // Map column indices dynamically based on headers
           const labelMap = {};
           cols.forEach((col, index) => {
             const label = (col.label || "").trim().toLowerCase();
@@ -362,9 +367,9 @@
 
           items.forEach((item) => {
             const itemName = (item.Item || "").trim();
-            const itemPrice = (item.Price || "").trim();
+            const itemPrice = formatPrice(item.Price);
             const itemDesc = (item.Description || "").trim();
-            const itemDPrice = (item.DPrice || "").trim();
+            const itemDPrice = formatPrice(item.DPrice);
 
             if (!itemName && !itemDesc) return;
 
@@ -377,7 +382,7 @@
             let headerDiv = document.createElement("div");
             headerDiv.className = "item-header";
 
-            // Scenario 1: Standard Item row (Item name + Price, with optional description underneath)
+            // Scenario 1: Standard Item row
             if (itemName !== "" && itemName !== "--" && itemName !== "-") {
               let nameSpan = document.createElement("span");
               nameSpan.className = "item-name";
@@ -387,7 +392,7 @@
               if (itemPrice) {
                 let priceSpan = document.createElement("span");
                 priceSpan.className = "item-price";
-                priceSpan.innerText = itemPrice.startsWith("$") ? itemPrice : "$" + itemPrice;
+                priceSpan.innerText = itemPrice;
                 headerDiv.appendChild(priceSpan);
               }
 
@@ -400,7 +405,7 @@
                 detailsDiv.appendChild(descDiv);
               }
             } 
-            // Scenario 2: Secondary Option / Add-on row (Description as option label + DPrice on the right)
+            // Scenario 2: Secondary Option / Add-on row (Description + DPrice)
             else if (itemDesc !== "" && itemDPrice !== "") {
               let nameSpan = document.createElement("span");
               nameSpan.className = "item-desc";
@@ -411,7 +416,7 @@
 
               let priceSpan = document.createElement("span");
               priceSpan.className = "dprice";
-              priceSpan.innerText = itemDPrice.startsWith("$") ? itemDPrice : "$" + itemDPrice;
+              priceSpan.innerText = itemDPrice;
               headerDiv.appendChild(priceSpan);
 
               detailsDiv.appendChild(headerDiv);
